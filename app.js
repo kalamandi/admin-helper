@@ -54,17 +54,14 @@ vk.updates.on('message_new', async (ctx) => {
     ctx.args = ctx?.text?.split(' ')
 
     if (ctx.args?.[0]) ctx.args[0] = ctx.args[0].toLowerCase()
-    else return;
+    else return
 
     ctx.db = db
     ctx.peer = await ctx.db.Server.findOne({ where: { peer_id: ctx.peerId } })
-    if (!ctx.peer && ctx.args[0] != '/setserver') { 
-        if (ctx.args[0] == '/setserver') return setServerHandler.execute(ctx)
-        return
-    }
+    if (!ctx.peer && ctx.args[0] != '/setserver') return
 
     ctx.user = await ctx.db.User.findOne({ where: { vk_id: ctx.senderId, server: ctx.peer.id } })
-    if (!ctx.user && ctx.args[0] != '/mynick') return;
+    if (!ctx.user && ctx.args[0] != '/mynick') return
 
     if (ctx.user?.status === 2) { 
         if (ctx.message?.attachments?.find(x => x.type === 'photo') 
@@ -86,7 +83,7 @@ vk.updates.on('message_new', async (ctx) => {
 
     if (cmd.info.access) {
         const admins = await getAdmins(ctx)
-        if (!admins.find(x => x.member_id === ctx.senderId)) return
+        if (!admins.find(x => x.member_id === ctx.senderId)) return ctx.reply('Вы не администратор')
     };
 
     return cmd.execute(ctx)
