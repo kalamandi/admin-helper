@@ -51,11 +51,6 @@ vk.updates.on('message_new', async (ctx) => {
     if (ctx.peerType != 'chat') return ctx.send('Бот работает только в чатах для администрации Black Russia')
     console.log(`[NEW MESSAGE]: ${ctx.text ? ctx.text : ctx.attachments[0].type} | PID: ${ctx.peerId} | SID: ${ctx.senderId}`)
 
-    ctx.args = ctx?.text?.split(' ')
-
-    if (ctx.args?.[0]) ctx.args[0] = ctx.args[0].toLowerCase()
-    else return
-
     ctx.db = db
     ctx.peer = await ctx.db.Server.findOne({ where: { peer_id: ctx.peerId } })
     if (!ctx.peer && ctx.args[0] != '/setserver') return
@@ -65,7 +60,7 @@ vk.updates.on('message_new', async (ctx) => {
 
     if (ctx.user?.status === 2) { 
         if (ctx.message?.attachments?.find(x => x.type === 'photo') 
-            || ctx.text.match(/краш/gi)) { 
+            || ctx?.text?.match(/краш/gi)) { 
 
             ctx.user.status = 0
             await ctx.user.save()
@@ -75,6 +70,10 @@ vk.updates.on('message_new', async (ctx) => {
                 
         return ctx.reply('❗️ Пришлите скриншот администрации в игре (/admins)')
     };
+
+    ctx.args = ctx?.text?.split(' ')
+    if (ctx.args?.[0]) ctx.args[0] = ctx.args[0].toLowerCase()
+    else return
 
     if (ctx.args[0].toLowerCase() === '/admins') return showAdmins(ctx)
 
