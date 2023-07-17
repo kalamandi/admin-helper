@@ -9,9 +9,9 @@ module.exports = async () => {
 
         admins.forEach(async(admin) => {
             const time = new Date().getTime();
+            const user = await User.findOne({ where: { id: admin.id } })
 
             if (time - new Date(admin.updatedAt).getTime() > 30000 && admin.status === 2) { 
-                const user = await User.findOne({ where: { id: admin.id } })
                 
                 user.status = 0
                 await user.save()
@@ -24,6 +24,9 @@ module.exports = async () => {
             } 
             
             if (time - new Date(admin.updatedAt).getTime() > 1000 * 60 * 60 * 3 && admin.status === 1) {
+                user.status = 0
+                await user.save()
+
                 await vk.api.messages.send({
                     message: `❗️ [id${admin.vk_id}|${admin.nick}] на сервере более 3 часов\nСтатус изменен на оффлайн 🔵`,
                     random_id: 0,
