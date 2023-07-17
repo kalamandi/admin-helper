@@ -1,13 +1,24 @@
 const { getAdmins } = require('../helpers');
-const { cmds } = require('../app');
 const { logs } = require('../keyboards');
 
 exports.execute = async (ctx) => { 
-    const admins = await getAdmins(ctx)
-    const isAdmin = admins.find(x => x.member_id === ctx.senderId)
+    const { cmds } = require('../app');
 
-    let commands = cmds.filter(x => x.info.type == 'text' && access == isAdmin ? true : false)
-        .map(cmd => `▫ ${cmd.text} -- ${cmd.description}`)
+    const admins = await getAdmins(ctx)
+    let isAdmin = admins.find(x => x.member_id === ctx.senderId)
+    isAdmin = isAdmin ? true : false;
+
+    const cmdsFiltred = [];
+
+    cmds.forEach(c => {
+        if (c.info.type != 'text') return;
+
+        if (c.info.access && isAdmin) return cmdsFiltred.push(c);
+        else if (!c.info.access) return cmdsFiltred.push(c)
+    });
+
+    let commands = cmdsFiltred
+        .map(cmd => `▫ ${cmd.info.command} -- ${cmd.info.description}`)
         .join('\n');
 
     return ctx.reply({
@@ -19,6 +30,5 @@ exports.execute = async (ctx) => {
 exports.info = { 
     command: '/phelp',
     type: 'text',
-    access: false,
     description: 'просмотр списка команд'
 }

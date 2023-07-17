@@ -51,10 +51,12 @@ vk.updates.on('message_new', async (ctx) => {
     if (ctx.peerType != 'chat') return ctx.send('Бот работает только в чатах для администрации Black Russia')
     console.log(`[NEW MESSAGE]: ${ctx.text ? ctx.text : ctx.attachments[0].type} | PID: ${ctx.peerId} | SID: ${ctx.senderId}`)
 
-    ctx.db = db
     ctx.args = ctx?.text?.split(' ')
-    if (ctx.args[0]) ctx.args[0] = ctx.args[0].toLowerCase()
 
+    if (ctx.args?.[0]) ctx.args[0] = ctx.args[0].toLowerCase()
+    else return;
+
+    ctx.db = db
     ctx.peer = await ctx.db.Server.findOne({ where: { peer_id: ctx.peerId } })
     if (!ctx.peer && ctx.args[0] != '/setserver') { 
         if (ctx.args[0] == '/setserver') return setServerHandler.execute(ctx)
@@ -62,7 +64,7 @@ vk.updates.on('message_new', async (ctx) => {
     }
 
     ctx.user = await ctx.db.User.findOne({ where: { vk_id: ctx.senderId, server: ctx.peer.id } })
-    if (!ctx.user && ctx.args[0] == '/mynick') return
+    if (!ctx.user && ctx.args[0] != '/mynick') return;
 
     if (ctx.user?.status === 2) { 
         if (ctx.message?.attachments?.find(x => x.type === 'photo') 
@@ -77,9 +79,9 @@ vk.updates.on('message_new', async (ctx) => {
         return ctx.reply('❗️ Пришлите скриншот администрации в игре (/admins)')
     };
 
-    if (ctx.args?.[0]?.toLowerCase() === '/admins') return showAdmins(ctx)
+    if (ctx.args[0].toLowerCase() === '/admins') return showAdmins(ctx)
 
-    const cmd = src.find(x => ctx.text.match(x.info.command) && x.info.type === 'text')
+    const cmd = src.find(x => ctx.args[0] == x.info.command && x.info.type === 'text')
     if (!cmd) return
 
     if (cmd.info.access) {

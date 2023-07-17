@@ -32,6 +32,5 @@ exports.execute = async (ctx) => {
 exports.info = { 
     command: '/mynick',
     type: 'text',
-    access: false,
     description: 'установка/изменение ника'
 };

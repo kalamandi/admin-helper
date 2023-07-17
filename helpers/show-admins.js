@@ -1,6 +1,6 @@
 const { Op } = require("sequelize");
 
-module.exports = async (ctx, action = false) => {  // context, vk, user, peer, action
+module.exports = async (ctx, action = false) => {
     const users = await ctx.db.User.findAll({
         where: { 
             server: ctx.peer.id,
@@ -14,7 +14,7 @@ module.exports = async (ctx, action = false) => {  // context, vk, user, peer, a
     let title
     
     if (!action) title = `[id${ctx.senderId}|${ctx.user.nick}], `;
-    else action === -1 ? `➖ ${ctx.user.nick} вышел с сервера` : `➕ ${ctx.user.nick} зашел на сервер`; 
+    else title = action === -1 ? `➖ ${ctx.user.nick} вышел с сервера` : `➕ ${ctx.user.nick} зашел на сервер`; 
 
     if (text === '') text = '\n❗️ На сервере никого нет';
     else text = `На сервере:\n\n${text}\n\nВсего: ${users.length} чел.`
