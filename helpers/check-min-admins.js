@@ -7,12 +7,12 @@ const { logs }= require('../keyboards');
 module.exports = async () => { 
     const date = new Date();
     if (
-        date.getUTCHours() + 3 > 9 
-        && date.getUTCHours() + 3 < 23
+        date.getUTCHours() + 3 < 9 
+        || date.getUTCHours() + 3 > 23
     ) return;
     
     const servers = await Server.findAll({ where: { type: 'logs', notify: 1 } });
-    servers.forEach(async(server) => {
+    servers.forEach(async(server) => {        
         const admins = await User.count({ 
             where: { 
                 server: server.id, 
@@ -26,11 +26,11 @@ module.exports = async () => {
             peer_id: server.peer_id
         }).catch(console.error);
                 
-        if (!users.items?.[0]) return;
+        if (!users.items?.[0]) return
         let text = [];
 
         users.items.forEach((user, index) => {  
-            if (!user.is_admin || user.member_id < 0) return;
+            if (user.is_admin || user.member_id < 0) return console.log('!user || admin');
             
             const arrayLength = Math.floor(index / 92)
             
@@ -38,7 +38,7 @@ module.exports = async () => {
             else text[arrayLength] += `[id${user.member_id}|🟥]`    
         });
 
-        if (!text[0]) return;
+        if (!text[0]) return
 
         await vk.api.messages.send({
             message: `❗️ Внимание, на сервере менее ${server.min_admins} администраторов, зайдите на сервер для исправления ситуации.${text[1] ? '' : `\n\n${text[0]}`}\n\nОтключить это уведомление можно с помощью команды /notify`,
