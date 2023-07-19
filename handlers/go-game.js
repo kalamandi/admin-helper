@@ -34,7 +34,7 @@ exports.execute = async (ctx) => {
         };
     };
 
-    await ctx.reply(`✅ Рассылка завершена.\n\nОтправлено сообщений: ${total - unsended.length}\nНе отправлено: ${unsended.length}${unreaded[0] ? `\n\n${unsended.map((us, i) => `[id${us}|${i + 1}]`).join(', ')}, напишите боту в ЛС любое сообщение.` : ''}`)
+    await ctx.reply(`✅ Рассылка завершена.\n\nОтправлено сообщений: ${total - unsended.length}\nНе отправлено: ${unsended.length}${unsended[0] ? `\n\n${unsended.map((us, i) => `[id${us}|${i + 1}]`).join(', ')}, напишите боту в ЛС любое сообщение.` : ''}`)
 
     return;
 };
