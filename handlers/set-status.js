@@ -1,7 +1,7 @@
 exports.execute = async (ctx) => { 
     const [, nick, status ] = ctx.args;
-    if (!nick || !status || ![0, 1].includes(status)) return ctx.reply('❗️ Введите никнейм и корректный статус.\n\nПример использования: /status Nikolay_Kalamandi 1 -- онлайн/0 -- оффлайн');
-    
+    if (!nick || !status || !['0', '1'].includes(status)) return ctx.reply('❗️ Введите никнейм и корректный статус.\n\nПример использования: /status Nikolay_Kalamandi 1 -- онлайн/0 -- оффлайн');
+
     const changed = await ctx.db.User.findOne({
         where: { 
             server: ctx.peer.id,
