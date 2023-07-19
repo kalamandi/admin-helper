@@ -58,7 +58,7 @@ vk.updates.on('message_new', async (ctx) => {
 
     ctx.db = db
     ctx.peer = await ctx.db.Server.findOne({ where: { peer_id: ctx.peerId } })
-    ctx.user = await ctx.db.User.findOne({ where: { vk_id: ctx.senderId, server: ctx.peer.id } })
+    ctx.user = await ctx.db.User.findOne({ where: { vk_id: ctx.senderId, server: ctx?.peer?.id ?? 0 } })
 
     if ((!ctx.user || !ctx.peer) && !ctx.text.match(/^\/(?:setserver|mynick)/ig)) return
 
