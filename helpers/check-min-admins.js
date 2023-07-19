@@ -30,7 +30,7 @@ module.exports = async () => {
         let text = [];
 
         users.items.forEach((user, index) => {  
-            if (user.is_admin || user.member_id < 0) return console.log('!user || admin');
+            if (user.is_admin || user.member_id < 0) return;
             
             const arrayLength = Math.floor(index / 92)
             
