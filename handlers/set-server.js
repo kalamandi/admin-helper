@@ -7,7 +7,7 @@ exports.execute = async (ctx) => {
     if (!admins[0]) return ctx.reply('Я не могу получить администраторов беседы.\n\nПожалуйста, выдйте администратора и попробуйте снова.');
     if (!admins.find(x => x.member_id === ctx.senderId)) return ctx.reply(`Установить сервер может только администратор беседы.`);
 
-    const [, server] = ctx.args[1]
+    const [, server] = ctx.args
     if (!server) return ctx.send('Вы не указали номер сервера.')
 
     const isTiedPeer = await ctx.db.Server.findOne({
