@@ -1,6 +1,8 @@
 exports.execute = async (ctx) => { 
     const [, confirm = false ] = ctx.args
-    if (!confirm || confirm != ctx.peer.server) return ctx.reply(`Напишите <</sdell ${ctx.peer.server}>> для подтверждения`);
+    if (!confirm || confirm != ctx.peer.server) {
+        return ctx.reply(`Напишите <</sdell ${ctx.peer.server}>> для подтверждения`);
+    };
 
     const { id: server } = ctx.peer;
     

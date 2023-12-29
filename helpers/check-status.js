@@ -4,15 +4,14 @@ const { vk } = require('../app');
 module.exports = async () => { 
     const servers = await Server.findAll({ where: { type: 'logs' } });
 
-    servers.forEach(async(server) => { 
+    for (const server of servers) {
         const admins = await User.findAll({ where: { server: server.id } });
 
-        admins.forEach(async(admin) => {
+        for (const admin of admins) {
             const time = new Date().getTime();
             const user = await User.findOne({ where: { id: admin.id } })
 
             if (time - new Date(admin.updatedAt).getTime() > 30000 && admin.status === 2) { 
-                
                 user.status = 0
                 await user.save()
                 
@@ -33,8 +32,8 @@ module.exports = async () => {
                     peer_id: server.peer_id
                 });
             };
-        });
-    });
+        }
+    };
 
     return setTimeout(module.exports, 10 * 1000)
 };

@@ -5,7 +5,9 @@ exports.execute = async (ctx) => {
         peer_id: ctx.peerId
     }).catch(console.error);
             
-    if (!users.items?.[0]) return ctx.reply('❗️ Не удалось получить участников беседы...');
+    if (!users.items?.[0]) {
+        return ctx.reply('❗️ Не удалось получить участников беседы.');
+    };
 
     let total = 0;
     const unsended = [];

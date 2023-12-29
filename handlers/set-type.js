@@ -11,8 +11,12 @@ exports.execute = async (ctx) => {
         where: { peer_id: ctx.peerId }
     })
  
-    if (hasThisPeer) return ctx.edit(`❌ Ошибка привязки: беседа с таким типом и сервером уже существует.`);
-    if (isTiedPeer) return ctx.edit(`❌ Ошибка привязки: данная беседа уже привязана к серверу.`);
+    if (hasThisPeer) {
+        return ctx.edit(`❌ Ошибка привязки: беседа с таким типом и сервером уже существует.`);
+    }
+    if (isTiedPeer) {
+        return ctx.edit(`❌ Ошибка привязки: данная беседа уже привязана к серверу.`);
+    }
 
     await ctx.db.Server.create({
         server, 

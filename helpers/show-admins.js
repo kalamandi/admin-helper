@@ -13,11 +13,13 @@ module.exports = async (ctx, action = false) => {
     let text = users.map((u, i) => `${i + 1}. ${u.nick}`).join('\n');
     let title
     
-    if (!action) title = `[id${ctx.senderId}|${ctx.user.nick}], `;
-    else title = action === -1 ? `➖ ${ctx.user.nick} вышел с сервера` : `➕ ${ctx.user.nick} зашел на сервер`; 
-
-    if (text === '') text = '\n❗️ На сервере никого нет';
-    else text = `На сервере:\n\n${text}\n\nВсего: ${users.length} чел.`
+    if (!action) {
+        title = `[id${ctx.senderId}|${ctx.user.nick}], `;
+    } else {
+        title = action === -1 ? `➖ ${ctx.user.nick} вышел с сервера` : `➕ ${ctx.user.nick} зашел на сервер`; 
+    };
+    
+    text = text == '' ? '\n❗️ На сервере никого нет' : `На сервере:\n\n${text}\n\nВсего: ${users.length} чел.`
 
     return ctx.api.messages.send({
         message: `${title}\n${text}`,

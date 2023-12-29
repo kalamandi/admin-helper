@@ -5,16 +5,20 @@ exports.execute = async (ctx) => {
     const { cmds } = require('../app');
 
     const admins = await getAdmins(ctx)
-    let isAdmin = admins.find(x => x.member_id === ctx.senderId)
-    isAdmin = isAdmin ? true : false;
+    const isAdmin = admins.find(x => x.member_id === ctx.senderId);
 
     const cmdsFiltred = [];
 
     cmds.forEach(c => {
-        if (c.info.type != 'text') return;
+        if (c.info.type != 'text') {
+            return;
+        }
 
-        if (c.info.access && isAdmin) return cmdsFiltred.push(c);
-        else if (!c.info.access) return cmdsFiltred.push(c)
+        if (c.info.access && !isAdmin) {
+            return;
+        };
+        
+        return cmdsFiltred.push(c)
     });
 
     let commands = cmdsFiltred
